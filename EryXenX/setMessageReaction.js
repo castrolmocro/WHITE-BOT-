@@ -5,13 +5,10 @@ const { generateOfflineThreadingID, getCurrentTimestamp } = require("../../utils
 
 module.exports = function (defaultFuncs, api, ctx) {
   return function setMessageReaction(reaction, messageID, threadID, callback, forceCustomReaction) {
-    // ✅ PATCH: old style support - threadID optional
-    // Old style: (reaction, messageID, callback, forceCustom)
-    // new style: (reaction, messageID, threadID, callback, forceCustom)
     if (typeof threadID === "function") {
       forceCustomReaction = callback;
       callback = threadID;
-      threadID = null; // threadID নেই
+      threadID = null;
     } else if (typeof threadID === "boolean") {
       forceCustomReaction = threadID;
       callback = undefined;
@@ -34,8 +31,6 @@ module.exports = function (defaultFuncs, api, ctx) {
         return reject(err);
       }
 
-      // ThreadID with MaasageID
-      // Or ctx 
       const finalThreadID = threadID || ctx.lastThreadID || "0";
 
       if (typeof ctx.wsReqNumber !== "number") ctx.wsReqNumber = 0;
